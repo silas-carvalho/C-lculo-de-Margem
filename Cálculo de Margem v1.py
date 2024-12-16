@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Dec 15 16:05:07 2024
+Created on Mon Dec 16 08:42:41 2024
 
 @author: Silas Carvalho
 
@@ -41,10 +41,12 @@ def input_decimal(mensagem):
             valor_str = input(mensagem).replace(',', '.')
             valor = Decimal(valor_str)
             if valor < 0:
-                raise ValueError("O valor não pode ser negativo.")
-            return valor
+                print(f"{Fore.RED}O valor não pode ser negativo.{Style.RESET_ALL}")
+                continue  # Volta para o início do loop
+            return valor  # Saída do loop, entrada válida
         except (ValueError, InvalidOperation) as e:
-            print(f"{Fore.RED}Por favor, insira um número válido. Erro: {e}")
+            print(f"{Fore.RED}Por favor, insira um número válido. Erro: {e}{Style.RESET_ALL}")
+            continue  # Volta para o início do loop
 
 def input_int(mensagem):
     while True:
@@ -55,6 +57,7 @@ def input_int(mensagem):
             return valor
         except ValueError as e:
             print(f"{Fore.RED}Por favor, insira um número inteiro válido. Erro: {e}")
+            continue  # Volta para o início do loop
 
 def input_s_n(mensagem):
     while True:
@@ -92,11 +95,13 @@ def calcular_precos():
             total_com_extras = preco_compra
 
         print_section("CONFIGURAÇÕES DE GANHO ESTIMADO")
-        margem_lucro = input_decimal("Digite a margem de lucro desejada (em %): ") / 100
 
-        if margem_lucro >= 1:
-            print(f"{Fore.RED}Erro: A margem de lucro deve ser menor que 100% (até 99,99%). A fórmula PV = custo / (1 - margem) resulta em divisão por zero quando a margem é 100% ou mais. Por favor, insira um valor menor.")
-            continue
+        while True:
+            margem_lucro = input_decimal("Digite a margem de lucro desejada (em %): ") / 100
+            if margem_lucro >= 1:
+                print(f"{Fore.RED}Erro: A margem de lucro deve ser menor que 100% (até 99,99%). A fórmula PV = custo / (1 - margem) resulta em divisão por zero quando a margem é 100% ou mais. Por favor, insira um valor menor.")
+                continue  # Volta para o início do loop da margem de lucro
+            break  # Saída do loop, entrada válida
 
         pv = round_decimal(total_com_extras / (1 - margem_lucro))
 
@@ -116,6 +121,8 @@ def calcular_precos():
 
 if __name__ == "__main__":
     calcular_precos()
+
+
 
 
 
